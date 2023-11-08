@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 // TODO: 2
 @Entity
@@ -19,13 +20,7 @@ public class User {
     private String fullName;
     private String email;
     private String password;
+    private LocalDateTime dateNow;
     @Enumerated(EnumType.STRING)
     private Role role;
-
-    public User(String email) {
-    }
-
-    public User() {
-
-    }
 }

@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 // TODO: 11
 @Service
 @RequiredArgsConstructor
@@ -22,10 +24,11 @@ public class AuthService {
         User user = new User();
         user.setEmail(request.getEmail());
         user.setRole(Role.USER);
+        user.setDateNow(LocalDateTime.now());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setFullName(request.getFullName());
         if (userRepository.existsByEmail(request.getEmail()))
-            throw new RuntimeException("not found email:" + request.getEmail() + " email");
+            throw new RuntimeException("found email:" + request.getEmail() + " email");
         userRepository.save(user);
         jwtUtils.generateToken(user.getEmail());
         return "Registered";
@@ -37,7 +40,7 @@ public class AuthService {
         });
         System.out.println(user.getPassword());
         System.out.println(passwordEncoder.encode(password));
-        if (!passwordEncoder.matches(password,user.getPassword())) {
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException("Invalid password");
         }
         String token = jwtUtils.generateToken(user.getEmail());
