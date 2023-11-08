@@ -3,8 +3,10 @@ package com.example.instagram.service;
 import com.example.instagram.config.JwtUtils;
 import com.example.instagram.dto.request.RegisterUserRequest;
 import com.example.instagram.dto.response.JWTResponse;
+import com.example.instagram.model.Direct;
 import com.example.instagram.model.User;
 import com.example.instagram.model.enums.Role;
+import com.example.instagram.repository.DirectRepository;
 import com.example.instagram.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +21,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final JwtUtils jwtUtils;
     private final PasswordEncoder passwordEncoder;
+    private final DirectRepository directRepository;
 
     public String register(RegisterUserRequest request) {
         User user = new User();
@@ -29,7 +32,10 @@ public class AuthService {
         user.setFullName(request.getFullName());
         if (userRepository.existsByEmail(request.getEmail()))
             throw new RuntimeException("found email:" + request.getEmail() + " email");
+        Direct direct = new Direct();
+        direct.setUser(user);
         userRepository.save(user);
+        directRepository.save(direct);
         jwtUtils.generateToken(user.getEmail());
         return "Registered";
     }
