@@ -1,17 +1,21 @@
 package com.example.instagram.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Data
-@AllArgsConstructor
+//@Builder
+@Getter
+@Setter
 @NoArgsConstructor
-public class ChatResponse {
+public class ChatOneResponse {
     private Long id;
     private String message;
     private String sender;
     private LocalDateTime localDateTime;
+
+    public ChatOneResponse(Long id, String message) {
+        this.id = id;
+        this.message = message;
+    }
 }
