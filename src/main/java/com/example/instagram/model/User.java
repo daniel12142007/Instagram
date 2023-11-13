@@ -29,4 +29,8 @@ public class User {
     private Direct direct;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Notification> notifications;
+    @OneToMany(mappedBy = "creator")
+    private List<Groups> group;
+    @ManyToMany(mappedBy = "users")
+    private List<Groups> groups;
 }

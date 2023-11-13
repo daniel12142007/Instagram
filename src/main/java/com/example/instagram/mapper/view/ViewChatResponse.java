@@ -1,7 +1,11 @@
 package com.example.instagram.mapper.view;
 
 import com.example.instagram.dto.response.ChatOneResponse;
+import com.example.instagram.dto.response.GroupResponse;
+import com.example.instagram.dto.response.UserResponse;
+import com.example.instagram.model.Groups;
 import com.example.instagram.model.Notification;
+import com.example.instagram.model.User;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
