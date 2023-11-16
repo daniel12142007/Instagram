@@ -23,4 +23,6 @@ public class Groups {
             joinColumns = @JoinColumn(name = "groups_id"),
             inverseJoinColumns = @JoinColumn(name = "users_id"))
     private List<User> users;
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
+    private List<Notification> notifications;
 }

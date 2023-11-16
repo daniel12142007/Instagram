@@ -1,6 +1,5 @@
 package com.example.instagram.repository;
 
-import com.example.instagram.dto.response.ChatOneResponse;
 import com.example.instagram.model.Notification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,5 +17,8 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
             from Notification n
             where n.direct.user.email = :email and n.user.email = :myEmail
             """)
-    List<Notification> findAllBy(@Param("myEmail") String myEmail, @Param("email") String email);
+    List<Notification> findAllByDirectNotification(@Param("myEmail") String myEmail, @Param("email") String email);
+
+    @Query("select n from Notification n where n.group.id = :id")
+    List<Notification> findAllNotificationByGroupId(@Param(value = "id") Long id);
 }
