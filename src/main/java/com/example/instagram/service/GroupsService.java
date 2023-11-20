@@ -8,16 +8,17 @@ import com.example.instagram.exception.IsUserNotPartOfGroup;
 import com.example.instagram.mapper.edit.EditGroupResponse;
 import com.example.instagram.mapper.view.ViewChatResponse;
 import com.example.instagram.mapper.view.ViewGroupResponse;
-import com.example.instagram.model.Groups;
-import com.example.instagram.model.Notification;
-import com.example.instagram.model.User;
+import com.example.instagram.model.*;
 import com.example.instagram.model.enums.FormatMessage;
 import com.example.instagram.repository.GroupsRepository;
+import com.example.instagram.repository.ImageRepository;
 import com.example.instagram.repository.NotificationRepository;
 import com.example.instagram.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -31,6 +32,28 @@ public class GroupsService {
     private final UserRepository userRepository;
     private final CrudService crudService;
     private final NotificationRepository notificationRepository;
+    private final ImageRepository imageRepository;
+
+    public List<ChatOneResponse> sendImage(String myEmail, Long groupId, MultipartFile file) throws IOException {
+        Groups groups = crudService.findByIdGroup(groupId);
+        User user = crudService.findByEmail(myEmail);
+        if (file == null)
+            throw new NullPointerException("image it is null!");
+        Image image = new Image();
+        image.setData(file.getBytes());
+        image.setData(file.getBytes());
+        image.setFileName(file.getOriginalFilename());
+        Notification notification = new Notification();
+        image.setNotification(notification);
+        notification.setUser(user);
+        notification.setImage(image);
+        notification.setGroup(groups);
+        notification.setMessage(null);
+        notification.setData_send(LocalDateTime.now());
+        notification.setFormatMessage(FormatMessage.IMAGE);
+        notificationRepository.save(notification);
+        return findAllMessageGroup(groupId, myEmail);
+    }
 
 
     public GroupResponse save(String email, GroupRequest request) {

@@ -56,8 +56,8 @@ public class ChatService {
         image.setData(file.getBytes());
         image.setData(file.getBytes());
         image.setFileName(file.getOriginalFilename());
-        imageRepository.save(image);
         Notification notification = new Notification();
+        image.setNotification(notification);
         notification.setUser(user);
         notification.setImage(image);
         notification.setDirect(direct);
@@ -73,7 +73,6 @@ public class ChatService {
         combinedList.addAll(notificationRepository.findAllByDirectNotification(myEmail, email));
         combinedList.addAll(notificationRepository.findAllByDirectNotification(email, myEmail));
         combinedList.sort(Comparator.comparing(Notification::getData_send));
-        Collections.reverse(combinedList);
         return viewChatResponse.chatResponse(combinedList);
     }
 }
