@@ -15,6 +15,10 @@ import com.example.instagram.repository.ImageRepository;
 import com.example.instagram.repository.NotificationRepository;
 import com.example.instagram.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,6 +37,18 @@ public class GroupsService {
     private final CrudService crudService;
     private final NotificationRepository notificationRepository;
     private final ImageRepository imageRepository;
+
+    public ResponseEntity<byte[]> findByImageForGroup(Long id, String email, Long groupId) {
+        Image image = imageRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Image not found with id: " + id));
+        if (!isUserInGroup(email, groupId)) {
+            throw new IsUserNotPartOfGroup();
+        }
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_PNG);
+
+        return new ResponseEntity<>(image.getData(), headers, HttpStatus.OK);
+    }
 
     public List<ChatOneResponse> sendImage(String myEmail, Long groupId, MultipartFile file) throws IOException {
         Groups groups = crudService.findByIdGroup(groupId);
