@@ -22,28 +22,39 @@ import java.util.List;
 @Tag(name = "Direct", description = "Chat,Direct for all")
 public class ChatApi {
     private final ChatService chatService;
-    private final ImageService imageService;
 
     @GetMapping("find/image/message")
     public ResponseEntity<byte[]> getImage(@RequestParam Long id) {
-        return imageService.findByImage(id);
+        String myEmail = SecurityContextHolder.getContext().getAuthentication() != null
+                ? SecurityContextHolder.getContext().getAuthentication().getName()
+                : null;
+        return chatService.findByImageForDirect(id, myEmail);
     }
 
     @GetMapping("find/message")
     public List<ChatOneResponse> findAllMessageInDirect(
             @RequestParam String email) {
-        return chatService.findAll(SecurityContextHolder.getContext().getAuthentication().getName(), email);
+        String myEmail = SecurityContextHolder.getContext().getAuthentication() != null
+                ? SecurityContextHolder.getContext().getAuthentication().getName()
+                : null;
+        return chatService.findAll(myEmail, email);
     }
 
     @PostMapping(value = "send/image/direct", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public List<ChatOneResponse> sendImage(@RequestPart MultipartFile file, @RequestParam String email) throws IOException {
-        return chatService.sendImage(SecurityContextHolder.getContext().getAuthentication().getName(), email, file);
+        String myEmail = SecurityContextHolder.getContext().getAuthentication() != null
+                ? SecurityContextHolder.getContext().getAuthentication().getName()
+                : null;
+        return chatService.sendImage(myEmail, email, file);
     }
 
     @PostMapping("send/message")
     public List<ChatOneResponse> sendMessageInDirect(
             @RequestParam String email,
             @RequestParam String message) {
-        return chatService.sendMessage(SecurityContextHolder.getContext().getAuthentication().getName(), email, message);
+        String myEmail = SecurityContextHolder.getContext().getAuthentication() != null
+                ? SecurityContextHolder.getContext().getAuthentication().getName()
+                : null;
+        return chatService.sendMessage(myEmail, email, message);
     }
 }

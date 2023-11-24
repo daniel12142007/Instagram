@@ -1,6 +1,7 @@
 package com.example.instagram.service;
 
 import com.example.instagram.dto.response.ChatOneResponse;
+import com.example.instagram.exception.AccessIsDenied;
 import com.example.instagram.mapper.view.ViewChatResponse;
 import com.example.instagram.model.Direct;
 import com.example.instagram.model.Image;
@@ -13,13 +14,16 @@ import com.example.instagram.repository.NotificationRepository;
 import com.example.instagram.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -33,6 +37,21 @@ public class ChatService {
     private final NotificationRepository notificationRepository;
     private final ViewChatResponse viewChatResponse;
     private final ImageRepository imageRepository;
+
+    public ResponseEntity<byte[]> findByImageForDirect(Long id, String email) {
+        Image image = imageRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Image not found with id: " + id));
+        if (image == null) {
+            throw new NullPointerException("image it is null");
+        }
+        Notification notification = image.getNotification();
+        if (notification.getUser().getEmail().equals(email) || notification.getDirect().getUser().getEmail().equals(email)) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.IMAGE_PNG);
+            return new ResponseEntity<>(image.getData(), headers, HttpStatus.OK);
+        }
+        throw new AccessIsDenied();
+    }
 
     public List<ChatOneResponse> sendMessage(String myEmail, String email, String message) {
         Direct direct = directRepository.findByUserEmail(email);

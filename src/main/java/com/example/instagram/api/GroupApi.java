@@ -28,46 +28,49 @@ public class GroupApi {
 
     @GetMapping("get/message")
     public List<ChatOneResponse> getMessage(@RequestParam Long groupId) {
-        String name = SecurityContextHolder.getContext().getAuthentication() != null
+        String myEmail = SecurityContextHolder.getContext().getAuthentication() != null
                 ? SecurityContextHolder.getContext().getAuthentication().getName()
                 : null;
-        return groupsService.findAllMessageGroup(groupId, name);
+        return groupsService.findAllMessageGroup(groupId, myEmail);
     }
 
     @GetMapping("find/image/message")
-    public ResponseEntity<byte[]> getImage(@RequestParam Long id) {
-        return imageService.findByImage(id);
+    public ResponseEntity<byte[]> getImage(@RequestParam Long imageId, @RequestParam Long groupId) {
+        String myEmail = SecurityContextHolder.getContext().getAuthentication() != null
+                ? SecurityContextHolder.getContext().getAuthentication().getName()
+                : null;
+        return groupsService.findByImageForGroup(imageId, myEmail, groupId);
     }
 
     @PostMapping(value = "send/image/group", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public List<ChatOneResponse> sendImage(@RequestPart MultipartFile image, @RequestParam Long groupId) throws IOException {
-        String name = SecurityContextHolder.getContext().getAuthentication() != null
+        String myEmail = SecurityContextHolder.getContext().getAuthentication() != null
                 ? SecurityContextHolder.getContext().getAuthentication().getName()
                 : null;
-        return groupsService.sendImage(name, groupId, image);
+        return groupsService.sendImage(myEmail, groupId, image);
     }
 
     @PostMapping("create/group")
     public GroupResponse save(@RequestBody GroupRequest groupRequest) {
-        String name = SecurityContextHolder.getContext().getAuthentication() != null
+        String myEmail = SecurityContextHolder.getContext().getAuthentication() != null
                 ? SecurityContextHolder.getContext().getAuthentication().getName()
                 : null;
-        return groupsService.save(name, groupRequest);
+        return groupsService.save(myEmail, groupRequest);
     }
 
     @PostMapping("add/user")
     public GroupResponse addUser(@RequestParam String email, @RequestParam Long groupId) {
-        String name = SecurityContextHolder.getContext().getAuthentication() != null
+        String myEmail = SecurityContextHolder.getContext().getAuthentication() != null
                 ? SecurityContextHolder.getContext().getAuthentication().getName()
                 : null;
-        return groupsService.saveUserInGroup(email, groupId, name);
+        return groupsService.saveUserInGroup(email, groupId, myEmail);
     }
 
     @PostMapping("send/message")
     public List<ChatOneResponse> sendMessage(@RequestParam Long groupId, @RequestParam String message) {
-        String name = SecurityContextHolder.getContext().getAuthentication() != null
+        String myEmail = SecurityContextHolder.getContext().getAuthentication() != null
                 ? SecurityContextHolder.getContext().getAuthentication().getName()
                 : null;
-        return groupsService.sendMessage(groupId, name, message);
+        return groupsService.sendMessage(groupId, myEmail, message);
     }
 }
