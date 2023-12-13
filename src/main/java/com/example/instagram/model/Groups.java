@@ -15,6 +15,8 @@ public class Groups {
     private String name;
     private String description;
     private final LocalDateTime dateNow = LocalDateTime.now();
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
+    private List<Notification> notifications;
     @ManyToOne
     @JoinColumn(name = "creator_id")
     private User creator;
@@ -23,6 +25,4 @@ public class Groups {
             joinColumns = @JoinColumn(name = "groups_id"),
             inverseJoinColumns = @JoinColumn(name = "users_id"))
     private List<User> users;
-    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
-    private List<Notification> notifications;
 }
