@@ -6,7 +6,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Calendar;
 import java.util.List;
 
 // TODO: 2
@@ -27,9 +26,15 @@ public class User {
     private Role role;
     @OneToOne(mappedBy = "user")
     private Direct direct;
-    @OneToMany(mappedBy = "user_like")
-    private List<Publication>likes;
-    @OneToMany(mappedBy = "user_favorites")
+    @ManyToMany
+    @JoinTable(name = "users_likes",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "like_id"))
+    private List<Publication> likes;
+    @ManyToMany
+    @JoinTable(name = "users_favorites",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "favorites_id"))
     private List<Publication> favorites;
     @OneToMany(mappedBy = "user")
     private List<Publication> publications;
