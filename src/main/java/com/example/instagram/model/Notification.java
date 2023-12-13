@@ -20,6 +20,8 @@ public class Notification {
     private LocalDateTime data_send;
     @Enumerated(EnumType.STRING)
     private FormatMessage formatMessage;
+    @OneToOne(mappedBy = "notification", cascade = CascadeType.ALL)
+    private Image image;
     @ManyToOne
     @JoinColumn(name = "sender_id")
     private User user;
@@ -29,6 +31,7 @@ public class Notification {
     @ManyToOne
     @JoinColumn(name = "group_id")
     private Groups group;
-    @OneToOne(mappedBy = "notification", cascade = CascadeType.ALL)
-    private Image image;
+    @ManyToOne
+    @JoinColumn(name = "publication_id")
+    private Publication publication;
 }

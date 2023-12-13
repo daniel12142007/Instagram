@@ -18,4 +18,7 @@ public class Image {
     @OneToOne
     @JoinColumn(name = "notification_id")
     private Notification notification;
+    @ManyToOne
+    @JoinColumn(name = "publication_id")
+    private Publication publication;
 }
