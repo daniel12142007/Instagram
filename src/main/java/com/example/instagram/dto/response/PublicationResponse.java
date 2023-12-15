@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -16,5 +17,6 @@ public class PublicationResponse {
     private String fullName;
     private String email;
     private LocalDate date;
+    private List<Long> idImages;
     private int countLikes;
 }

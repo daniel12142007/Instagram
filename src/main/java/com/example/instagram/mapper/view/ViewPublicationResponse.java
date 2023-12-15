@@ -2,6 +2,7 @@ package com.example.instagram.mapper.view;
 
 import com.example.instagram.dto.response.PublicationResponse;
 import com.example.instagram.model.Publication;
+import com.example.instagram.repository.ImageRepository;
 import com.example.instagram.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ViewPublicationResponse {
     private final UserRepository userRepository;
+    private final ImageRepository imageRepository;
 
     public PublicationResponse mapPublication(Publication publication) {
         LocalDateTime localDateTime = publication.getDataCreated();
@@ -31,6 +33,7 @@ public class ViewPublicationResponse {
                 .date(localDate)
                 .fullName(fullName)
                 .id(publication.getId())
+                .idImages(imageRepository.findAllImageByPublication(publication))
                 .countLikes(userRepository.findCountByPublicationId(publication.getId()))
                 .build();
     }
