@@ -24,7 +24,7 @@ public class Publication {
     @OneToMany(mappedBy = "publication", cascade = CascadeType.ALL)
     private List<Image> images;
     @OneToMany(mappedBy = "publication", cascade = CascadeType.ALL)
-    private List<Notification> comments;
+    private List<Commit> comments;
     @ManyToMany(mappedBy = "likes")
     private List<User> user_like;
     @ManyToMany(mappedBy = "favorites")

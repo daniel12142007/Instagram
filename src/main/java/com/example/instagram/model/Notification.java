@@ -31,7 +31,4 @@ public class Notification {
     @ManyToOne
     @JoinColumn(name = "group_id")
     private Groups group;
-    @ManyToOne
-    @JoinColumn(name = "publication_id")
-    private Publication publication;
 }
