@@ -6,7 +6,6 @@ import com.example.instagram.model.Image;
 import com.example.instagram.model.Publication;
 import com.example.instagram.model.User;
 import com.example.instagram.repository.PublicationRepository;
-import com.example.instagram.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

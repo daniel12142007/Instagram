@@ -8,7 +8,10 @@ import com.example.instagram.exception.IsUserNotPartOfGroup;
 import com.example.instagram.mapper.edit.EditGroupResponse;
 import com.example.instagram.mapper.view.ViewChatResponse;
 import com.example.instagram.mapper.view.ViewGroupResponse;
-import com.example.instagram.model.*;
+import com.example.instagram.model.Groups;
+import com.example.instagram.model.Image;
+import com.example.instagram.model.Notification;
+import com.example.instagram.model.User;
 import com.example.instagram.model.enums.FormatMessage;
 import com.example.instagram.repository.GroupsRepository;
 import com.example.instagram.repository.ImageRepository;
@@ -38,6 +41,7 @@ public class GroupsService {
     private final NotificationRepository notificationRepository;
     private final ImageRepository imageRepository;
 
+
     public ResponseEntity<byte[]> findByImageForGroup(Long id, String email, Long groupId) {
         Image image = imageRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Image not found with id: " + id));
@@ -46,7 +50,6 @@ public class GroupsService {
         }
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_PNG);
-
         return new ResponseEntity<>(image.getData(), headers, HttpStatus.OK);
     }
 
