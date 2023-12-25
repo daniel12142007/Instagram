@@ -14,7 +14,6 @@ import java.util.List;
 @Getter
 @Setter
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,6 +25,8 @@ public class User {
     private Role role;
     @OneToOne(mappedBy = "user")
     private Direct direct;
+    @OneToMany(mappedBy = "userCommit", cascade = CascadeType.ALL)
+    private List<Commit> commits;
     @ManyToMany
     @JoinTable(name = "users_likes",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -36,6 +37,11 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "favorites_id"))
     private List<Publication> favorites;
+    @ManyToMany
+    @JoinTable(name = "users_likes_commit",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "commit_id"))
+    private List<Commit> commitsLikes;
     @OneToMany(mappedBy = "user")
     private List<Publication> publications;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

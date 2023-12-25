@@ -49,4 +49,5 @@ public class PublicationService {
         Publication publication = publicationRepository.findById(id).orElseThrow(RuntimeException::new);
         return viewPublicationResponse.mapPublication(publication);
     }
+//    public
 }
