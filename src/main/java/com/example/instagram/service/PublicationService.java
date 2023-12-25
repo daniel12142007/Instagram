@@ -1,10 +1,13 @@
 package com.example.instagram.service;
 
+import com.example.instagram.dto.response.CommitResponse;
 import com.example.instagram.dto.response.PublicationResponse;
 import com.example.instagram.mapper.view.ViewPublicationResponse;
+import com.example.instagram.model.Commit;
 import com.example.instagram.model.Image;
 import com.example.instagram.model.Publication;
 import com.example.instagram.model.User;
+import com.example.instagram.repository.CommitRepository;
 import com.example.instagram.repository.PublicationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +23,7 @@ public class PublicationService {
     private final CrudService crudService;
     private final PublicationRepository publicationRepository;
     private final ViewPublicationResponse viewPublicationResponse;
+    private final CommitRepository commitRepository;
 
     public PublicationResponse postedPublication(String myEmail,
                                                  List<String> images,
@@ -49,5 +53,15 @@ public class PublicationService {
         Publication publication = publicationRepository.findById(id).orElseThrow(RuntimeException::new);
         return viewPublicationResponse.mapPublication(publication);
     }
-//    public
+
+//    public List<CommitResponse> commitResponses(String email, Long publicationId) {
+//        List<Commit> list = commitRepository.findAllCommitByPublicationId(publicationId);
+//    }
 }
+//private Long publicationId;
+//    private String fullName;
+//    private String email;
+//    private String commit;
+//    private int likeCount;
+//    private boolean myLike;
+//    private LocalDateTime localDateTime;
