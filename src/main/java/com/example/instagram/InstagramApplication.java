@@ -19,10 +19,10 @@ public class InstagramApplication {
 
     @PostConstruct
     public void init() {
-        RegisterUserRequest request = new RegisterUserRequest();
-        request.setEmail("string@gmail.com");
-        request.setPassword("123");
-        request.setFullName("Daniel Ahatzanov");
-        authService.register(request);
+//        RegisterUserRequest request = new RegisterUserRequest();
+//        request.setEmail("string@gmail.com");
+//        request.setPassword("Daniel.123.!");
+//        request.setFullName("Daniel Ahatzanov");
+//        authService.register(request);
     }
 }

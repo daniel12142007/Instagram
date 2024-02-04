@@ -13,10 +13,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class CommitResponse {
     private Long publicationId;
+    private Long commitId;
     private String fullName;
     private String email;
     private String commit;
-    private int likeCount;
+    private long likeCount;
     private boolean myLike;
     private LocalDateTime localDateTime;
 }

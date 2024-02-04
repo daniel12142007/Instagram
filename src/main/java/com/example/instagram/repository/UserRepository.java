@@ -19,4 +19,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT count(u) FROM User u JOIN u.likes p WHERE p.id = :publicationId")
     int findCountByPublicationId(@Param(value = "publicationId") Long publicationId);
+
 }
