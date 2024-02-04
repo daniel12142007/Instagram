@@ -2,7 +2,6 @@ package com.example.instagram.api;
 
 import com.example.instagram.dto.response.ChatOneResponse;
 import com.example.instagram.service.ChatService;
-import com.example.instagram.service.ImageService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
