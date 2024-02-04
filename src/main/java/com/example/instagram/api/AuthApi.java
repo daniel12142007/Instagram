@@ -18,7 +18,7 @@ import javax.validation.constraints.*;
 @RequiredArgsConstructor
 @RequestMapping("api/v1/auth")
 @Tag(name = "Authentication", description = "Authentication for all")
-public class MyApi {
+public class AuthApi {
     private final AuthService authService;
 
     @PostMapping("/register")

@@ -4,6 +4,7 @@ import com.example.instagram.dto.response.PublicationResponse;
 import com.example.instagram.service.PublicationService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,10 +16,12 @@ public class PublicationApi {
     private final PublicationService publicationService;
 
     @PostMapping("/save/publication")
-    public PublicationResponse savePublication(@RequestParam String email,
-                                               @RequestParam List<String> image,
+    public PublicationResponse savePublication(@RequestParam List<String> image,
                                                @RequestParam String description) {
-        return publicationService.postedPublication(email, image, description);
+        String myEmail = SecurityContextHolder.getContext().getAuthentication() != null
+                ? SecurityContextHolder.getContext().getAuthentication().getName()
+                : null;
+        return publicationService.postedPublication(myEmail, image, description);
     }
 
     @GetMapping("/find/by/{id}")

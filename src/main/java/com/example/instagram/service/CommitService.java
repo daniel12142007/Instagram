@@ -1,13 +1,17 @@
 package com.example.instagram.service;
 
 import com.example.instagram.dto.response.CommitResponse;
+import com.example.instagram.model.Commit;
+import com.example.instagram.model.Publication;
 import com.example.instagram.model.User;
 import com.example.instagram.repository.CommitRepository;
+import com.example.instagram.repository.PublicationRepository;
 import com.example.instagram.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.Serial;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -15,11 +19,23 @@ import java.util.List;
 public class CommitService {
     private final CommitRepository commitRepository;
     private final UserRepository userRepository;
+    private final PublicationRepository publicationRepository;
 
     public List<CommitResponse> commitResponses(String email, Long publicationId) {
         User user = userRepository.findByEmail(email).orElseThrow(RuntimeException::new);
-        if (commitRepository.findAllCommitResponse(publicationId, user.getEmail()).isEmpty())
-            throw new RuntimeException("Empty");
         return commitRepository.findAllCommitResponse(publicationId, user.getEmail());
+    }
+
+    public List<CommitResponse> committed(String email, Long publicationId, String myCommit) {
+        User user = userRepository.findByEmail(email).orElseThrow(RuntimeException::new);
+        Publication publication = publicationRepository.findById(publicationId).orElseThrow(RuntimeException::new);
+        Commit commit = Commit.builder()
+                .commit(myCommit)
+                .userCommit(user)
+                .publication(publication)
+                .dataNow(LocalDateTime.now())
+                .build();
+        commitRepository.save(commit);
+        return commitResponses(email, publicationId);
     }
 }

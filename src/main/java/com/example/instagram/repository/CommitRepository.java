@@ -30,6 +30,7 @@ public interface CommitRepository extends JpaRepository<Commit, Long> {
             from Publication p
             left join p.comments c
             where p.id = :publicationId
+            order by c.dataNow desc 
             """)
     List<CommitResponse> findAllCommitResponse(
             @Param(value = "publicationId") Long publicationId,
