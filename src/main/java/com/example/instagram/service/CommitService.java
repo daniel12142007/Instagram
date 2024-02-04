@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.io.Serial;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +24,10 @@ public class CommitService {
 
     public List<CommitResponse> commitResponses(String email, Long publicationId) {
         User user = userRepository.findByEmail(email).orElseThrow(RuntimeException::new);
-        return commitRepository.findAllCommitResponse(publicationId, user.getEmail());
+        return commitRepository.findAllCommitResponse(publicationId, user.getEmail()).stream()
+                .peek(commitResponse -> commitResponse.setCommitResponses(
+                        commitRepository.findByIdAnswerCommit(commitResponse.getCommitId(), publicationId, email)
+                )).collect(Collectors.toList());
     }
 
     public List<CommitResponse> committed(String email, Long publicationId, String myCommit) {
@@ -34,6 +38,21 @@ public class CommitService {
                 .userCommit(user)
                 .publication(publication)
                 .dataNow(LocalDateTime.now())
+                .build();
+        commitRepository.save(commit);
+        return commitResponses(email, publicationId);
+    }
+
+    public List<CommitResponse> committedAnswer(String email, Long publicationId, Long commitId, String myCommit) {
+        User user = userRepository.findByEmail(email).orElseThrow(RuntimeException::new);
+        Publication publication = publicationRepository.findById(publicationId).orElseThrow(RuntimeException::new);
+        Commit mainCommit = commitRepository.findById(commitId).orElseThrow(RuntimeException::new);
+        Commit commit = Commit.builder()
+                .commit(myCommit)
+                .userCommit(user)
+                .publication(publication)
+                .dataNow(LocalDateTime.now())
+                .mainCommit(mainCommit)
                 .build();
         commitRepository.save(commit);
         return commitResponses(email, publicationId);

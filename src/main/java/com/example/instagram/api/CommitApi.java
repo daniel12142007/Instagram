@@ -31,4 +31,14 @@ public class CommitApi {
                 : null;
         return commitService.committed(myEmail, publicationId, commit);
     }
+
+    @PostMapping("committed/answer")
+    public List<CommitResponse> saveCommit(@RequestParam Long publicationId,
+                                           @RequestParam Long commitId,
+                                           @RequestParam String commit) {
+        String myEmail = SecurityContextHolder.getContext().getAuthentication() != null
+                ? SecurityContextHolder.getContext().getAuthentication().getName()
+                : null;
+        return commitService.committedAnswer(myEmail, publicationId, commitId, commit);
+    }
 }

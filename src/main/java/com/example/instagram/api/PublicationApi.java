@@ -15,6 +15,10 @@ import java.util.List;
 public class PublicationApi {
     private final PublicationService publicationService;
 
+    @GetMapping("/find/by/{id}")
+    public PublicationResponse findByIdPublication(@PathVariable Long id) {
+        return publicationService.findByIdPublication(id);
+    }
     @PostMapping("/save/publication")
     public PublicationResponse savePublication(@RequestParam List<String> image,
                                                @RequestParam String description) {
@@ -24,8 +28,4 @@ public class PublicationApi {
         return publicationService.postedPublication(myEmail, image, description);
     }
 
-    @GetMapping("/find/by/{id}")
-    public PublicationResponse findByIdPublication(@PathVariable Long id) {
-        return publicationService.findByIdPublication(id);
-    }
 }

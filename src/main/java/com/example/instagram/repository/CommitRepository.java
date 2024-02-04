@@ -30,9 +30,34 @@ public interface CommitRepository extends JpaRepository<Commit, Long> {
             from Publication p
             left join p.comments c
             where p.id = :publicationId
-            order by c.dataNow desc 
+            and c.mainCommit is null
+            order by c.dataNow desc
             """)
     List<CommitResponse> findAllCommitResponse(
             @Param(value = "publicationId") Long publicationId,
             @Param(value = "email") String email);
+
+    @Query("""
+             select new com.example.instagram.dto.response.CommitResponse(
+            p.id,
+            c.id,
+            c.userCommit.fullName,
+            c.userCommit.email,
+            c.commit,
+            (select count(likeCount) from c.users likeCount),
+            (select coalesce(
+            case when count(myLike)>0 then true else false end,false
+            )
+            from Commit commit join commit.users myLike where myLike.email = :email and commit.mainCommit.id = :commitId),
+            c.dataNow
+            )
+            from Publication p
+            left join p.comments c
+            where p.id = :publicationId
+            and c.mainCommit.id = :commitId
+            order by c.dataNow desc
+            """)
+    List<CommitResponse> findByIdAnswerCommit(@Param("commitId") Long commitId,
+                                              @Param(value = "publicationId") Long publicationId,
+                                              @Param(value = "email") String email);
 }
